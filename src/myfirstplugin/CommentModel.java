@@ -1,5 +1,6 @@
 package myfirstplugin;
 
+// This class hold comment info
 public class CommentModel {
 	public String ProjectName;
 	public String FilePath;
