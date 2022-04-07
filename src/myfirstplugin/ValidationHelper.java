@@ -21,6 +21,8 @@ public class ValidationHelper {
 				
 				if(LinetoCompare >= cmntModel.StartLine && LinetoCompare <= cmntModel.EndLine){
 					tempCmntModel.DeclaredMethodName = methodInfo.Name;
+					tempCmntModel.FilePath = methodInfo.FilePath;
+					tempCmntModel.ProjectName = methodInfo.ProjectName;
 					filteredCommentModel.add(tempCmntModel);
 					hasPriorComment = true;
 				}
@@ -32,6 +34,8 @@ public class ValidationHelper {
 
 			tempCmntModel = new CommentModel();
 			tempCmntModel.DeclaredMethodName = methodInfo.Name;
+			tempCmntModel.FilePath = methodInfo.FilePath;
+			tempCmntModel.ProjectName = methodInfo.ProjectName;
 			filteredCommentModel.add(tempCmntModel);
 		} 	
 		return filteredCommentModel;

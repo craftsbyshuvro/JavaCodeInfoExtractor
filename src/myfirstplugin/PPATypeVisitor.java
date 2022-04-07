@@ -81,12 +81,14 @@ public class PPATypeVisitor extends ASTVisitor {
  
 		final CompilationUnit cu = (CompilationUnit) parser.createAST(null);
 		
-		CommentModel cmntModel = new CommentModel();
 
 		
 		for (Comment comment : (List<Comment>) cu.getCommentList()) {
 			CommentVisitor cmntVisitor = new CommentVisitor(cu, this.javaFileAsString);
 			comment.accept(cmntVisitor);
+			
+			CommentModel cmntModel = new CommentModel();
+
 			
 			cmntModel.Comment = CommentVisitor.cmntModel.Comment;
 			cmntModel.StartLine = CommentVisitor.cmntModel.StartLine;
@@ -97,6 +99,7 @@ public class PPATypeVisitor extends ASTVisitor {
 
 			this.commentModelList.add(cmntModel);
 			
+			cmntModel = null;
 			cmntVisitor = null;
 		}
 
@@ -123,6 +126,8 @@ public class PPATypeVisitor extends ASTVisitor {
 		// Method declaration and comment		
 		MethodInfoModel methodInfoModel = new MethodInfoModel();
 		methodInfoModel.Name = node.getName().toString();
+		methodInfoModel.FilePath = this.projectDetailsModel.FilePath;
+		methodInfoModel.ProjectName = this.projectDetailsModel.ProjectName;
 		methodInfoModel.StartLine = this.cu.getLineNumber(node.getName().getStartPosition());
 		this.methodInfoList.add(methodInfoModel);
 		
@@ -143,7 +148,7 @@ public class PPATypeVisitor extends ASTVisitor {
 		methodInvoked.MethodContainsInvokedMethod = node.getName().toString();
 		methodInvoked.InvokedMethods = new ArrayList<String>(); 
 		
-
+		
 		
 	    methodBody.accept(new ASTVisitor() {
 			@Override
@@ -184,11 +189,24 @@ public class PPATypeVisitor extends ASTVisitor {
 		
 		ArrayList<CommentModel> filteredCmntModelList = new ArrayList<CommentModel>();  
 		filteredCmntModelList = validationHelper.validMethodPriorComment(commentModelList, this.methodInfoList, this.javaFileAsString);
-		
+
+	
 //		for(CommentModel cmntModel : filteredCmntModelList){
 //			System.out.println("MethodName: 	"+ cmntModel.DeclaredMethodName);
 //			System.out.println("Comment: 	"+ cmntModel.Comment);
+//			System.out.println("TYPE: 	"+ cmntModel.CommentType);
+//			System.out.println("Start : 	"+ cmntModel.StartLine+"-- END: "+cmntModel.EndLine);
+//			System.out.println("PATH: 	"+ cmntModel.FilePath);
+//			System.out.println("===========");
 //		}
+		
+		
+//		for(MethodInfoModel mModel : this.methodInfoList){
+//			System.out.println("MethodName: 	"+ mModel.Name);
+//			System.out.println("Comment: 	"+ mModel.StartLine);
+//			System.out.println("===========");
+//		}
+		
 		
 		//API calling Sequences
 		this.projectDetailsModel.InvokedMethods.addAll(InvokedMethods);
